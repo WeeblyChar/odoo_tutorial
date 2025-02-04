@@ -4,7 +4,7 @@ class SampleEstateModel(models.Model):
     _name = "estate.property"
     _description = "test model for estate, why are there so many variables? what?"
     
-    
+
     name = fields.Char('Estate Name', required=True)
     description = fields.Text('Estate Description', required=True)
     postcode = fields.Char('Postcode', required=True)
