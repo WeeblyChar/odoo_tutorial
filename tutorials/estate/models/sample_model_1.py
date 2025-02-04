@@ -8,18 +8,25 @@ class SampleEstateModel(models.Model):
     name = fields.Char('Estate Name', required=True)
     description = fields.Text('Estate Description', required=True)
     postcode = fields.Char('Postcode', required=True)
-    date_availability = fields.Date('date_availability', requred=True, default=fields.Date.today)
-    expected_price = fields.Float('expected_price',required=True)
-    selling_price = fields.Float('selling_price',required=True)
-    bedrooms = fields.Integer('bedrooms', required=True)
-    living_area = fields.Integer('living_area', default=0)
-    facades = fields.Integer('facades', default=0)
-    garage = fields.Boolean('garage', default=False)
-    garden = fields.Boolean('garden', default=False)
-    garden_area = fields.Integer('garden_area', default=0)
+    date_availability = fields.Date('Date Availability', requred=True, default=fields.Date.today)
+    expected_price = fields.Float('Expected Price', required=True)
+    selling_price = fields.Float('Selling Price', required=True)
+    bedrooms = fields.Integer('Bedrooms', required=True, default=1)
+    living_area = fields.Integer('Living Area (Square Meter)', required=True, default=0)
+    facades = fields.Integer('Facades', default=1)
+    garage = fields.Boolean('Garage', default=False)
+    garden = fields.Boolean('Garden', default=False)
+    garden_area = fields.Integer('Garden Area (Square Meter)', default=0)
     garden_orientation = fields.Selection(
         string='Orientation',
         selection=[('north', 'North'), ('south', 'South'), ('east', 'East'), ('west', 'West')],
         help='Please select the garden\'s orientation relative to the property.'
     )
     
+    _sql_constraints = [
+        ('check_expected_price', 'CHECK(expected_price >= 0)', 'The amount of price cannot be negative!'),
+        ('check_selling_price', 'CHECK(selling_price >= 0)', 'The amount of price cannot be negative!'),
+        ('check_living_area', 'CHECK(living_area >= 0)', 'The size of living area cannot be negative!'),
+        ('check_garden_area', 'CHECK(garden_area >= 0)', 'The size of garden area cannot be negative!'),
+        ('check_facades', 'CHECK(facades >= 0)', 'The amount of facades cannot be negative!'),
+    ]
