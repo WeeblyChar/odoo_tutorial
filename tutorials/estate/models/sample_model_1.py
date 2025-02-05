@@ -8,7 +8,7 @@ class SampleEstateModel(models.Model):
     name = fields.Char('Estate Name', required=True)
     description = fields.Text('Estate Description', required=True)
     postcode = fields.Char('Postcode', required=True)
-    date_availability = fields.Date('Date Availability', requred=True, default=fields.Date.today)
+    date_availability = fields.Date('Date Availability', required=True, default=fields.Date.today)
     expected_price = fields.Float('Expected Price', required=True)
     selling_price = fields.Float('Selling Price', required=True)
     bedrooms = fields.Integer('Bedrooms', required=True, default=1)
