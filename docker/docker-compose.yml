@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   odoo:
-    image: odoo:18
+    build: .
     container_name: odoo
     depends_on:
       - db
@@ -14,7 +14,7 @@ services:
       - ../tutorials:/mnt/tutorial-addons
       - ./odoo.conf:/etc/odoo/odoo.conf
     environment:
-      - DB_HOST=odoo-db
+      - DB_HOST=host.docker.internal
       - DB_PORT=5432
       - DB_USER=Odoo_Practice
       - DB_PASSWORD=1231
@@ -29,6 +29,8 @@ services:
       - POSTGRES_PASSWORD=1231
     volumes:
       - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"  # Expose PostgreSQL to the host machine
 
   otel-collector:
     image: otel/opentelemetry-collector:latest

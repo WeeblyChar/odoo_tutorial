@@ -22,7 +22,6 @@ class SampleEstateModel(models.Model):
         selection=[('north', 'North'), ('south', 'South'), ('east', 'East'), ('west', 'West')],
         help='Please select the garden\'s orientation relative to the property.'
     )
-    temp_check_update = fields.Boolean('Temp', default=False)
     
     _sql_constraints = [
         ('check_expected_price', 'CHECK(expected_price >= 0)', 'The amount of price cannot be negative!'),
