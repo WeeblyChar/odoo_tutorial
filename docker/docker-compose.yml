@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  odoo:
+    image: odoo:18
+    container_name: odoo
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo-data:/var/lib/odoo
+      - ../addons:/mnt/extra-addons
+      - ../tutorials:/mnt/tutorial-addons
+      - ./odoo.conf:/etc/odoo/odoo.conf
+    environment:
+      - DB_HOST=odoo-db
+      - DB_PORT=5432
+      - DB_USER=Odoo_Practice
+      - DB_PASSWORD=1231
+      - DB_NAME=practice_database
+
+  db:
+    image: postgres:17
+    container_name: odoo-db
+    environment:
+      - POSTGRES_DB=practice_database
+      - POSTGRES_USER=Odoo_Practice
+      - POSTGRES_PASSWORD=1231
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    container_name: otel-collector
+    restart: unless-stopped
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    ports:
+      - "4317:4317"  # gRPC
+      - "4318:4318"  # HTTP
+      - "9464:9464"  # Prometheus Metrics
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+volumes:
+  db-data:
+  odoo-data:
