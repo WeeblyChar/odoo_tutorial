@@ -4,45 +4,64 @@ services:
     container_name: odoo
     depends_on:
       - db
+      - otel-collector
     ports:
       - "8069:8069"
+      # - "9464:9464" # <-- Expose port to OpenTelemetry Prometheus exporter
     volumes:
-      - C:\Users\LEGION\odoo\docker\odoo.conf:/etc/odoo/odoo.conf
-      - C:\Users\LEGION\odoo\addons:/mnt/extra-addons
-      - C:\Users\LEGION\odoo\tutorials:/mnt/tutorial-addons
-    environment:
-      - HOST=db
-      - USER=odoo
-      - PASSWORD=odoo
-      - PGDATABASE=odoo  # Ensures fresh DB each time
-      - --db-filter=^odoo$  # Restricts to only "odoo" DB
+      - ./odoo.conf:/etc/odoo/odoo.conf
+      - ../addons:/mnt/extra-addons
+      - ../tutorials:/mnt/tutorial-addons
+      - ../inDevModules:/mnt/inDevModules
+    # command: ["opentelemetry-instrument", "odoo", "-i", "base"]
+    command: ["python3", "/opt/odoo/odoo-entrypoint.py"]
+    networks:
+      - odoo-network
+    mem_limit: 4g  # Increase memory limit
+    mem_reservation: 2g  # Set a minimum memory allocation
 
   db:
-    image: postgres:17
-    container_name: odoo-db
+    image: postgres:15
+    container_name: db
     environment:
-      - POSTGRES_DB=practice_database
-      - POSTGRES_USER=Odoo_Practice
-      - POSTGRES_PASSWORD=1231
+      POSTGRES_DB: odoo
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
     volumes:
-      - db-data:/var/lib/postgresql/data
-    tmpfs:
-      - /var/lib/postgresql/data
-    ports:
-      - "5432:5432"  # Expose PostgreSQL to the host machine
-    restart: always
+      - odoo-db-data:/var/lib/postgresql/data
+    networks:
+      - odoo-network
 
   otel-collector:
-    image: otel/opentelemetry-collector:latest
+    image: otel/opentelemetry-collector-contrib:latest
     container_name: otel-collector
-    restart: unless-stopped
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     command: ["--config=/etc/otel-collector-config.yaml"]
     ports:
       - "4317:4317"  # gRPC
       - "4318:4318"  # HTTP
-      - "9464:9464"  # Prometheus Metrics
+      - "9464:9464"  # prometheus exporter
+    depends_on:
+      - loki
+    environment:
+      - OTEL_SERVICE_NAME=odoo
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=odoo,service.version=1.0.0
+      # - OTEL_LOG_LEVEL=debug
+      - PYTHONPATH=/opt/odoo:/usr/local/lib/python3.12/dist-packages
+    networks:
+      - odoo-network
+
+  tempo:
+    image: grafana/tempo:latest
+    container_name: tempo
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo.yaml
+    ports:
+      - "3200:3200"  # Query API
+    networks:
+      - odoo-network
 
   prometheus:
     image: prom/prometheus:latest
@@ -51,10 +70,52 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+    networks:
+      - odoo-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    networks:
+      - odoo-network
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    volumes:
+      - ./loki-config.yml:/etc/loki-config.yml
+      - loki-data:/var/lib/loki  # Persistent storage
+    command: -config.file=/etc/loki-config.yml
+    ports:
+      - "3100:3100"  # Loki API
+    networks:
+      - odoo-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - odoo-network
+
+networks:
+  odoo-network:
+    driver: bridge
 
 volumes:
-  db-data:
-    driver: local
-    driver_opts:
-      type: tmpfs
-      device: tmpfs  # This resets the database on each restart
+  odoo-db-data:
+  loki-data:  # Persistent storage for Loki

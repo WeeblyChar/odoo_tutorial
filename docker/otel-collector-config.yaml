@@ -1,29 +1,59 @@
 receivers:
-  otlp:
+  otlp: # <--- Receives Data from specified endpoints
     protocols:
       grpc:
         endpoint: "0.0.0.0:4317" # <--- Spans and Metrics
       http:
         endpoint: "0.0.0.0:4318" # <--- Alternative HTTP receiver
+  prometheus: # <--- Receives Data from specified site
+    config:
+      scrape_configs:
+        - job_name: "odoo"
+          metrics_path: "/metrics"
+          static_configs:
+            - targets: ["odoo:8069"]  # Adjust if your Odoo container has a different hostname
+  filelog:
+    exclude: []
+    include:
+      - /var/log/docker/containers/odoo/*.log  # Replace <container_id> with your container's ID or name
+    include_file_name: false
+    include_file_path: true
+    operators:
+      - type: json_parser
+
+processors:
+  batch:
+  attributes:
+    actions:
+      - key: Line
+        action: extract
+        pattern: '^(?P<client_ip>[\d.]+) - - \[(?P<request_timestamp>[\d/:\w\s]+)\] "(?P<http_method>\w+) (?P<url>\S+) (?P<http_protocol>\S+)" (?P<status_code>\d+) -$'
 
 exporters:
-  otlp:
-    endpoint: "0.0.0.0:4317"
-    tls:
-      insecure: true
   prometheus:
     endpoint: "0.0.0.0:9464"
+  debug:
+    verbosity: detailed # <-- Prints the logs into OTel Collector logs. Just for checking if it's recieving logs.
+  otlp:
+    endpoint: "tempo:4317"  # <-- Change this to your tracing backend
+    tls:
+      insecure: true
+  otlphttp: 
+    endpoint: "http://loki:3100/otlp" # <-- Loki Exporter for logs using otlphttp protocol
+    tls:
+      insecure: true
 
 service:
   pipelines:
-    traces:
-      receivers: [otlp]
-      exporters: [otlp]
-
-    metrics:
-      receivers: [otlp]
-      exporters: [prometheus]
-
     logs:
       receivers: [otlp]
+      processors: [batch, attributes]
+      exporters: [otlphttp]
+    traces:
+      receivers: [otlp]
+      processors: [batch]
       exporters: [otlp]
+    metrics:
+      receivers: [otlp, prometheus]
+      processors: [batch]
+      exporters: [prometheus]
