@@ -5,13 +5,6 @@ receivers:
         endpoint: "0.0.0.0:4317" # <--- Spans and Metrics
       http:
         endpoint: "0.0.0.0:4318" # <--- Alternative HTTP receiver
-  prometheus: # <--- Receives Data from specified site
-    config:
-      scrape_configs:
-        - job_name: "odoo"
-          metrics_path: "/metrics"
-          static_configs:
-            - targets: ["odoo:8069"]  # Adjust if your Odoo container has a different hostname
   filelog:
     exclude: []
     include:
@@ -23,12 +16,13 @@ receivers:
 
 processors:
   batch:
-  attributes:
-    actions:
-      - key: Line
-        action: extract
-        pattern: '^(?P<client_ip>[\d.]+) - - \[(?P<request_timestamp>[\d/:\w\s]+)\] "(?P<http_method>\w+) (?P<url>\S+) (?P<http_protocol>\S+)" (?P<status_code>\d+) -$'
+  # attributes:
+  #   actions:
+  #     - key: Line
+  #       action: extract
+  #       pattern: '^[\d-]+\s+[\d:,]+\s+\d+\s+\w+\s+odoo\s+werkzeug:\s+(?P<ip_address>[\d.]+) - - \[(?P<request_timestamp>[\d/:\w\s]+)\] "(?P<http_method>\w+) (?P<endpoint>\S+) (?P<http_protocol>\S+)" (?P<status_code>\d+) - (?P<query_count>\d+) (?P<query_time>[\d.]+) (?P<query_remaining_time>[\d.]+)$'
 
+          
 exporters:
   prometheus:
     endpoint: "0.0.0.0:9464"
@@ -47,13 +41,13 @@ service:
   pipelines:
     logs:
       receivers: [otlp]
-      processors: [batch, attributes]
+      processors: [batch]
       exporters: [otlphttp]
     traces:
       receivers: [otlp]
       processors: [batch]
       exporters: [otlp]
     metrics:
-      receivers: [otlp, prometheus]
+      receivers: [otlp]
       processors: [batch]
       exporters: [prometheus]

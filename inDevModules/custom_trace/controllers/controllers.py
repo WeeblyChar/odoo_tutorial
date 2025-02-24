@@ -73,7 +73,7 @@ request_counter = meter.create_counter(
 )
 
 # Set up OpenTelemetry Tracer Provider
-trace.set_tracer_provider(TracerProvider())
+trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "odoo"})))
 tracer = trace.get_tracer(__name__)
 
 # Configure OTLP Exporter to send traces to Tempo
