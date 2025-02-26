@@ -1,11 +1,13 @@
 # Use the official Odoo image as the base
-FROM odoo:latest
+FROM odoo:17
 
 USER root
 
 # Install OpenTelemetry dependencies in a clean environment
 RUN pip config set global.break-system-packages true && \
     pip install --no-cache-dir \
+    prometheus_client \
+#   ^ Custom prometheus exporter for Odoo
     opentelemetry-exporter-prometheus \
 #   ^ Prometheus Exporter
     # opentelemetry-api \

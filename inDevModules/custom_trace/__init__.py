@@ -1,4 +1,4 @@
-from . import controllers
+from . import controllers, models
 
 # Import OpenTelemetry Instrumentations
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
