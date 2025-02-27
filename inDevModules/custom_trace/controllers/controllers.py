@@ -1,4 +1,4 @@
-#### Tracing Dependencies #####
+########### Tracing Dependencies ############
 from odoo import http
 from opentelemetry import trace
 from opentelemetry.trace import SpanKind
@@ -9,9 +9,9 @@ from opentelemetry.sdk.trace.export import (
 )
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 import time
-#####################################
-
-#### Logging Dependencies (Loki) ####
+#############################################
+#===========================================#
+######## Logging Dependencies (Loki) ########
 import logging
 from opentelemetry._logs import set_logger_provider
 from opentelemetry.exporter.otlp.proto.grpc._log_exporter import (
@@ -20,15 +20,15 @@ from opentelemetry.exporter.otlp.proto.grpc._log_exporter import (
 from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
 from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 from opentelemetry.sdk.resources import Resource
-######################################
-
-#### Metric Dependencies #####
+#############################################
+#===========================================#
+############ Metric Dependencies ############
 from opentelemetry import metrics
 from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
-######################################
-
+#############################################
+#===========================================#
 ##### OTel-Logger initialization #####
 logger_provider = LoggerProvider(
     resource=Resource.create({
@@ -52,16 +52,15 @@ logging.getLogger().setLevel(logging.INFO) # <-- logging.INFO = logs anything fr
 logging.getLogger().addHandler(log_handler)
 
 logging.getLogger(__name__)
-#####################################
+#############################################
+#===========================================#
 ########## Prometheus Exporter ##############
-
 from prometheus_client import CollectorRegistry, Counter, Gauge, generate_latest
 
 from odoo import http
 from odoo.http import request
 
 _logger = logging.getLogger(__name__)
-
 
 class PrometheusController(http.Controller):
     @http.route(["/metrics"], auth="public", type="http", methods=["GET"])
@@ -72,16 +71,16 @@ class PrometheusController(http.Controller):
 
         registry = CollectorRegistry()
         for metric in request.env["ir.metric"].sudo().search([]):
-            if metric.type == "gauge":
+            if metric.metric_type == "gauge":
                 g = Gauge(metric.name, metric.description, registry=registry)
                 g.set(metric._get_value())
-            if metric.type == "counter":
+            if metric.metric_type == "counter":
                 c = Counter(metric.name, metric.description, registry=registry)
                 c.inc(metric._get_value())
         return generate_latest(registry)
-
 #############################################
-
+#===========================================#
+################# Metrics ###################
 metrics.set_meter_provider(MeterProvider(
     metric_readers=[PeriodicExportingMetricReader(OTLPMetricExporter(endpoint="http://otel-collector:4317", insecure=True))]  
 ))
@@ -99,7 +98,9 @@ request_counter = meter.create_counter(
     "odoo.http.requests.total",
     description="Total number of HTTP requests handled by Odoo"
 )
-
+#############################################
+#===========================================#
+################ Trace/Span #################
 # Set up OpenTelemetry Tracer Provider
 trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "odoo"})))
 tracer = trace.get_tracer(__name__)
@@ -113,8 +114,9 @@ trace.get_tracer_provider().add_span_processor(span_processor)
 
 # Print traces to console for debugging (this can be optional)
 # trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
-
-
+#############################################
+#===========================================#
+########### Metrics Controller ##############
 class MetricsController(http.Controller):
     @http.route('/*', type='http', auth='public')
     def catch_all(self, **kwargs):
@@ -157,3 +159,5 @@ class MetricsController(http.Controller):
     def handle_web_request(self):
         """Handles backend web requests separately."""
         return "Web request handled"
+#############################################
+#===========================================#

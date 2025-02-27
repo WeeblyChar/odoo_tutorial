@@ -1,17 +1,17 @@
 {
-    'name': "Odoo OpenTelemetry Integration",
+    'name': "Odoo OpenTelemetry Integration (Deprecated)",
     
     'summary': """
         Integrate Odoo with OpenTelemetry for logging, tracing, and metrics. Test Update 4.
     """,
     
     'description': """
-        Integrate Odoo with OpenTelemetry for logging, tracing, and metrics. Test Update 4.
+        Integrate Odoo with OpenTelemetry for logging, tracing, and metrics. Test Update 4. 
     """,
     
     'category': 'inDevModules/Odoo_OpenTelemetry_Integration',
-    'installable': True,
-    'application': True,
+    'installable': False,
+    'application': False,
     'version': '1.0',
     'author': 'Amsal',
     'depends': ['base', 'web'],

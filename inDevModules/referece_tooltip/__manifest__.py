@@ -1,5 +1,5 @@
 {
-    "name": "Reference Tooltip",
+    "name": "Reference Tooltip (Broken, will cause server error)",
     "version": "1.0.0",
     "summary": "Wikipedia-style reference tooltips on hover",
     "description": "Wikipedia-style reference tooltips on hover",
@@ -10,7 +10,6 @@
     "data": [
         "views/reference_template.xml"
     ],
-    "installable": True,
-    "application": True,
-    "auto_install": False
+    "installable": False,
+    "application": False
 }

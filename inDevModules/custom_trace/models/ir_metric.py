@@ -1,6 +1,6 @@
-import ast
 import datetime
 import logging
+from ast import literal_eval
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
@@ -20,7 +20,7 @@ class Metric(models.Model):
                 If no active then move to the status \'archive\'.
                 Still can by found using filters button""",
     )
-    type = fields.Selection(
+    metric_type = fields.Selection(
         [
             ("gauge", "Gauge"),
             ("counter", "Counter"),
@@ -49,7 +49,8 @@ class Metric(models.Model):
     field_id = fields.Many2one(
         "ir.model.fields",
         "Measured Field",
-        domain="[('store', '=', True), ('model_id', '=', model_id), ('ttype', 'in', ['float','integer','monetary'])]",
+        domain="""[('store', '=', True), ('model_id', '=', model_id),
+            ('ttype', 'in', ['float','integer','monetary'])]""",
     )
     field = fields.Char(related="field_id.name")
     operation = fields.Selection(
@@ -72,8 +73,7 @@ class Metric(models.Model):
                 raise ValidationError(_("Metric name must be lower case."))
 
     def _get_default_domain(self):
-        domain = ast.literal_eval(self.domain)
-        if self.name == "cron_jobs_not_triggered":
+        if self.name == "odoo_cron_jobs_not_triggered":
             domain = [
                 "&",
                 (
@@ -85,7 +85,7 @@ class Metric(models.Model):
                 ),
                 ("active", "=", True),
             ]
-        if self.name == "pending_mails":
+        elif self.name == "odoo_pending_mails":
             domain = [
                 (
                     "date",
@@ -95,6 +95,8 @@ class Metric(models.Model):
                     ),
                 )
             ]
+        else:
+            domain = literal_eval(self.domain)
         return domain
 
     def _get_model_count(self):
@@ -113,7 +115,6 @@ class Metric(models.Model):
         if self.field_id:
             records = related_model.search(domain)
             values = records.mapped(self.field)
-            _logger.warning(values)
             if values:
                 if operation == "avg":
                     return sum(values) / len(values)
