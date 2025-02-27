@@ -1,13 +1,15 @@
 {
-    'name': 'Open Telemetry Monitoring Module',
+    'name': 'Open Telemetry Monitoring Module (Prototype Phase)',
     'version': '1.0',
-    'summary': 'Integrates custom Open Telemetry configuration for Odoo',
+    'summary': 'Integrates Custom Open Telemetry Configuration for Odoo.',
     'description': """
                     Integrates custom Open Telemetry configuration for Odoo.
                     This module uses Grafana Loki (logs), Grafana Tempo (trace/span), Prometheus (metrics) and Grafana (Visualization).
-                    People call it OTel-LGTM, how to memorize it? Just follow this phrase, \"this OpenTelemetry Looks Good To Me (OTel-LGTM)\".
-                    Sounds like a joke but I did that too many times and it works. Jokes aside, there will be an extension for metrics in this module
-                    that you can access using Developer Mode. Go to Settings -> Technical -> Metrics (most likely at the bottom most list).
+                    People call it OTel-LGTM, what does it mean? OTel (Open Telemetry) LGTM (Loki, Grafana, Tempo, Mimir).
+                    Mimir is basically Prometheus so don\'t think too much about it.
+                    How to memorize it? Just follow this phrase, \"this OpenTelemetry Looks Good To Me (OTel-LGTM)\".
+                    Jokes aside, there will be an extension for metrics in this module.
+                    You can access this by going into Developer Mode and go to Settings -> Technical -> Metrics. It should be listed under Resources.
                    """,
     'author': 'Amsal',
     'depends': ['base', 'resource'],
