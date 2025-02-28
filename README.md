@@ -1,54 +1,55 @@
-[![Build Status](https://runbot.odoo.com/runbot/badge/flat/1/master.svg)](https://runbot.odoo.com/runbot)
-[![Tech Doc](https://img.shields.io/badge/master-docs-875A7B.svg?style=flat&colorA=8F8F8F)](https://www.odoo.com/documentation/master)
-[![Help](https://img.shields.io/badge/master-help-875A7B.svg?style=flat&colorA=8F8F8F)](https://www.odoo.com/forum/help-1)
-[![Nightly Builds](https://img.shields.io/badge/master-nightly-875A7B.svg?style=flat&colorA=8F8F8F)](https://nightly.odoo.com/)
+# Odoo with OpenTelemetry  
 
-# Odoo  
+This is a modified version of Odoo with OpenTelemetry LGTM, integrated via the OpenTelemetry module within the application itself.  
 
-Modified Odoo with OpenTelemetry LGTM, integrated via the OpenTelemetry module within the app itself.  
+## Access URLs  
+
+- **Odoo:** [http://localhost:8069](http://localhost:8069)  
+- **Grafana:** [http://localhost:3000](http://localhost:3000)  
+- **Prometheus:** [http://localhost:9090](http://localhost:9090)  
 
 ## To-Do List  
 
-### ✅ Connect OpenTelemetry to its backends (Loki, Tempo, Grafana, and Prometheus) and Odoo  
+### ✅ OpenTelemetry Integration with Backends  
 - **Loki** ✅  
-  - Connect Odoo via OTel receiver. ✅  
-  - Connect Grafana via OTel exporter. ✅  
+  - Connect Odoo via OpenTelemetry receiver. ✅  
+  - Connect Grafana via OpenTelemetry exporter. ✅  
   - Build a pipeline for data transmission. ✅  
   - Verify data reception in Grafana. ✅  
 
 - **Tempo** ✅  
-  - Connect Odoo via OTel receiver. ✅  
-  - Connect Grafana via OTel exporter. ✅  
+  - Connect Odoo via OpenTelemetry receiver. ✅  
+  - Connect Grafana via OpenTelemetry exporter. ✅  
   - Build a pipeline for data transmission. ✅  
   - Verify data reception in Grafana. ✅  
 
 - **Prometheus** ✅  
-  - Connect Odoo via OTel receiver. ✅  
-  - Connect Grafana via OTel exporter. ✅  
+  - Connect Odoo via OpenTelemetry receiver. ✅  
+  - Connect Grafana via OpenTelemetry exporter. ✅  
   - Build a pipeline for data transmission. ✅  
   - Verify data reception in Grafana. ✅  
 
-### 🔧 Validate Data (In Progress)  
+### 🔧 Data Validation (In Progress)  
 - **Loki** (BETA)  
-  - Data validation. ✅  
-  - Export data from the `Line` variable using regex. ✅  
-  - TBA  
+  - Validate logs. ✅  
+  - Extract data from the `Line` variable using regex. ✅  
+  - Further improvements (TBA).  
 
 - **Tempo** (DEV)  
-  - Data validation. ❓  
-  - TBA  
+  - Validate traces. ❓  
+  - Further improvements (TBA).  
 
 - **Prometheus** (DEV)  
-  - Data validation. ❌ (BAD)  
+  - Validate metrics. ❌ (Issues found)  
   - Integrate Prometheus Exporter module: [Prometheus Exporter by Mint System](https://github.com/Mint-System/Odoo-Apps-Server-Tools/tree/17.0/prometheus_exporter) ✅  
-  - Data validation after exporter module integration. ✅  
+  - Validate metrics after exporter module integration. ✅  
   - **Custom metrics:** (DEV)  
-    - ORM Metrics. (DEV)  
-    - System Metrics. ✅  
+    - ORM Metrics (In Development)  
+    - System Metrics ✅  
 
-### 🛠 Fix Issues & Improvements  
-- Prevent Prometheus connection loss from OpenTelemetry to Odoo during module installation.  
-- Create Grafana Dashboard. (DEV)
-- Add more explanations within the codes.
+### 🛠 Fixes & Improvements  
+- Resolve Prometheus connection issues between OpenTelemetry and Odoo during module installation.  
+- Create a Grafana dashboard. (In Development)  
+- Add detailed code documentation and explanations.  
 
 *→ README design generated using ChatGPT*
