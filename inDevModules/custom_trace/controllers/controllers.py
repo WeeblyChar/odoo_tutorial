@@ -74,14 +74,26 @@ class PrometheusController(http.Controller):
         # Collect system metrics
         system_metrics = request.env["ir.metric"].get_system_metrics()
         cpu_gauge = Gauge("system_cpu_usage", "CPU usage percentage", registry=registry)
-        cpu_gauge.set(system_metrics["cpu_usage"])
+        cpu_gauge.set(system_metrics["cpu_usage_percentage"])
 
         memory_gauge = Gauge("system_memory_usage", "Memory usage percentage", registry=registry)
-        memory_gauge.set(system_metrics["memory_usage"])
+        memory_gauge.set(system_metrics["memory_usage_percentage"])
 
         disk_gauge = Gauge("system_disk_usage", "Disk usage percentage", registry=registry)
-        disk_gauge.set(system_metrics["disk_usage"])
+        disk_gauge.set(system_metrics["disk_usage_percentage"])
+        
+        memory_used_gauge = Gauge("system_memory_used_gb", "Memory used in GB", registry=registry)
+        memory_used_gauge.set(system_metrics["memory_used_gb"])
 
+        memory_total_gauge = Gauge("system_memory_total_gb", "Total system memory in GB", registry=registry)
+        memory_total_gauge.set(system_metrics["memory_total_gb"])
+
+        disk_used_gauge = Gauge("system_disk_used_gb", "Disk used in GB", registry=registry)
+        disk_used_gauge.set(system_metrics["disk_used_gb"])
+
+        disk_total_gauge = Gauge("system_disk_total_gb", "Total disk space in GB", registry=registry)
+        disk_total_gauge.set(system_metrics["disk_total_gb"])
+        
         # Collect Odoo-specific metrics
         active_users_gauge = Gauge("odoo_active_users", "Number of active users", registry=registry)
         active_users_gauge.set(request.env["ir.metric"].get_active_users())

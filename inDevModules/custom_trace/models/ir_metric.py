@@ -145,10 +145,18 @@ class Metric(models.Model):
     @staticmethod
     def get_system_metrics():
         """ Collect system-level metrics using psutil """
+        ### Return System Metrics ####
+        mem = psutil.virtual_memory()
+        disk = psutil.disk_usage('/')
+
         return {
-            "cpu_usage": psutil.cpu_percent(interval=1),
-            "memory_usage": psutil.virtual_memory().percent,
-            "disk_usage": psutil.disk_usage('/').percent,
+            "cpu_usage_percentage": psutil.cpu_percent(interval=1),
+            "memory_used_gb": mem.used / (1024 ** 3),  # Convert bytes to GB
+            "memory_total_gb": mem.total / (1024 ** 3),  # Convert bytes to GB
+            "disk_used_gb": disk.used / (1024 ** 3),
+            "disk_total_gb": disk.total / (1024 ** 3),
+            "memory_usage_percentage": (mem.used / mem.total) * 100,
+            "disk_usage_percentage": (disk.used / disk.total) * 100,
         }
 
     @staticmethod
