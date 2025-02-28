@@ -13,6 +13,7 @@ RUN pip config set global.break-system-packages true && \
     opentelemetry-exporter-prometheus \
 #   ^ Prometheus Exporter
     opentelemetry-instrumentation-psycopg2 \
+#   ^ Query Logging
     opentelemetry-instrumentation-wsgi \
     opentelemetry-exporter-otlp-proto-http\ 
 #   ^ HTTP
@@ -21,6 +22,7 @@ RUN pip config set global.break-system-packages true && \
     opentelemetry-distro && \
 #   ^ Contains opentelemetry api and sdk
     opentelemetry-bootstrap -a install && \
+#   ^ unpack the distro package
     rm ~/.config/pip/pip.conf
 
 # Installing curl, wget, ping and grep for docker container. REMOVE IF NOT NEEDED.

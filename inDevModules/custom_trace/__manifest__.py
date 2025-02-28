@@ -16,7 +16,7 @@
     'data': [],
     'installable': True,
     'application': False, # <-- No, this is not an application. It's just an extension.
-    'auto_install': False, # <-- Automatically install this package to start monitoring Odoo during server start (optional)
+    'auto_install': True, # <-- Automatically install this package to start monitoring Odoo during server start (optional)
     'category': 'inDevModules/Custom_Tracing',
     "data": [
         "security/ir.model.access.csv",
@@ -27,8 +27,9 @@
       'python': [ # <-- Refer to Dockerfile if module breaks
         'opentelemetry-distro',
         'opentelemetry-exporter-otlp',
-        'prometheus_client'
-      ],  
+        'opentelemetry-instrumentation-psycopg2',
+        'prometheus_client',
+      ],
     },
     'license': 'AGPL-3',
 }

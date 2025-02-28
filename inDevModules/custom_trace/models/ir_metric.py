@@ -2,7 +2,9 @@ import datetime
 import logging
 from ast import literal_eval
 
+import psutil
 from odoo import _, api, fields, models
+from odoo.http import request
 from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
@@ -137,3 +139,42 @@ class Metric(models.Model):
             return self._get_field_value()
         else:
             return self._get_model_count()
+        
+    ### ADDITIONAL METRICS FOR SYSTEM & ODOO MONITORING ###
+
+    @staticmethod
+    def get_system_metrics():
+        """ Collect system-level metrics using psutil """
+        return {
+            "cpu_usage": psutil.cpu_percent(interval=1),
+            "memory_usage": psutil.virtual_memory().percent,
+            "disk_usage": psutil.disk_usage('/').percent,
+        }
+
+    @staticmethod
+    def get_active_users():
+        """ Count active users (logged in) """
+        return request.env['res.users'].sudo().search_count([('login', '!=', False)])
+
+    @staticmethod
+    def get_request_response_time():
+        """ Calculate average request response time """
+        logs = request.env['ir.logging'].sudo().search([
+            ('name', '=', 'odoo.http'),
+            ('type', '=', 'server'),
+            ('level', '=', 'INFO')
+        ], limit=50, order="create_date desc")
+
+        response_times = [float(log.message.split()[-2]) for log in logs if "Request duration" in log.message]
+        return sum(response_times) / len(response_times) if response_times else 0
+
+    @staticmethod
+    def get_query_execution_time():
+        """ Extract query execution times from ir.logging """
+        logs = request.env['ir.logging'].sudo().search([
+            ('type', '=', 'sql'),
+            ('level', '=', 'INFO')
+        ], limit=50, order="create_date desc")
+
+        execution_times = [float(log.message.split()[-2]) for log in logs if "executed in" in log.message]
+        return sum(execution_times) / len(execution_times) if execution_times else 0

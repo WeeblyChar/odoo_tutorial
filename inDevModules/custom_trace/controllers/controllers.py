@@ -33,7 +33,6 @@ from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 logger_provider = LoggerProvider(
     resource=Resource.create({
     "service.name": "odoo",
-    # "severity.text": "level" # <-- No workie. Dunno why but it no workie like I wanted it to be.
     }),
 )
 
@@ -70,6 +69,30 @@ class PrometheusController(http.Controller):
         """
 
         registry = CollectorRegistry()
+        
+        ############## Added Code ######################
+        # Collect system metrics
+        system_metrics = request.env["ir.metric"].get_system_metrics()
+        cpu_gauge = Gauge("system_cpu_usage", "CPU usage percentage", registry=registry)
+        cpu_gauge.set(system_metrics["cpu_usage"])
+
+        memory_gauge = Gauge("system_memory_usage", "Memory usage percentage", registry=registry)
+        memory_gauge.set(system_metrics["memory_usage"])
+
+        disk_gauge = Gauge("system_disk_usage", "Disk usage percentage", registry=registry)
+        disk_gauge.set(system_metrics["disk_usage"])
+
+        # Collect Odoo-specific metrics
+        active_users_gauge = Gauge("odoo_active_users", "Number of active users", registry=registry)
+        active_users_gauge.set(request.env["ir.metric"].get_active_users())
+
+        response_time_gauge = Gauge("odoo_request_response_time", "Average request response time", registry=registry)
+        response_time_gauge.set(request.env["ir.metric"].get_request_response_time())
+
+        query_time_gauge = Gauge("odoo_query_execution_time", "Average query execution time", registry=registry)
+        query_time_gauge.set(request.env["ir.metric"].get_query_execution_time())
+        ################################################
+        
         for metric in request.env["ir.metric"].sudo().search([]):
             if metric.metric_type == "gauge":
                 g = Gauge(metric.name, metric.description, registry=registry)
