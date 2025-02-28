@@ -41,7 +41,7 @@ Modified Odoo with OpenTelemetry LGTM, integrated via the OpenTelemetry module w
 - **Prometheus** (DEV)  
   - Data validation. ❌ (BAD)  
   - Integrate Prometheus Exporter module: [Prometheus Exporter by Mint System](https://github.com/Mint-System/Odoo-Apps-Server-Tools/tree/17.0/prometheus_exporter) ✅  
-  - Data validation after integration. ✅  
+  - Data validation after exporter module integration. ✅  
   - **Custom metrics:** (DEV)  
     - ORM Metrics. (DEV)  
     - System Metrics. ✅  
@@ -49,5 +49,6 @@ Modified Odoo with OpenTelemetry LGTM, integrated via the OpenTelemetry module w
 ### 🛠 Fix Issues & Improvements  
 - Prevent Prometheus connection loss from OpenTelemetry to Odoo during module installation.  
 - Create Grafana Dashboard. (DEV)
+- Add more explanations within the codes.
 
 *→ README design generated using ChatGPT*
