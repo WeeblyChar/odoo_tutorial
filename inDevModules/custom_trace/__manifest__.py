@@ -12,7 +12,7 @@
                     You can access this by going into Developer Mode and go to Settings -> Technical -> Metrics. It should be listed under Resources.
                    """,
     'author': 'Amsal',
-    'depends': ['base', 'resource'],
+    'depends': ['base', 'resource', 'bus'],
     'data': [],
     'installable': True,
     'application': False, # <-- No, this is not an application. It's just an extension.
