@@ -1,23 +1,20 @@
 receivers:
-  filelog:
-    include: [ "/var/lib/docker/containers/*/*.log" ]
-    start_at: beginning
+  otlp:
+    protocols:
+      grpc:
+      http:
 
 exporters:
   loki:
     endpoint: http://loki:3100/loki/api/v1/push
-
-  otlp:
-    endpoint: tempo:4317
-    tls:
-      insecure: true
+  otlphttp:
+    endpoint: "http://tempo:4318"
 
 service:
   pipelines:
     logs:
-      receivers: [filelog]
+      receivers: [otlp]
       exporters: [loki]
-      
     traces:
       receivers: [otlp]
-      exporters: [otlp]
+      exporters: [otlphttp]

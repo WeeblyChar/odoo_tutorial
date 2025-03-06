@@ -6,6 +6,7 @@ USER root
 
 # Install OpenTelemetry dependencies in a clean environment
 RUN pip config set global.break-system-packages true && \
+    pip install --no-cache-dir \
     prometheus_client \
     opentelemetry-exporter-prometheus \
     opentelemetry-instrumentation-psycopg2 \
