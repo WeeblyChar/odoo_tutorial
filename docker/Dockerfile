@@ -48,7 +48,7 @@ USER odoo
 RUN which python3
 
 # Run Odoo with OpenTelemetry Auto-Instrumentation
-# ENTRYPOINT ["opentelemetry-instrument", "--traces_exporter", "otlp, console", "--logs_exporter", "none", "--", "/usr/bin/python3", "/opt/odoo/odoo-entrypoint.py"]
+ENTRYPOINT ["opentelemetry-instrument", "--traces_exporter", "console", "--metrics_exporter", "none", "--", "/usr/bin/python3", "/opt/odoo/odoo-entrypoint.py"]
 # ENTRYPOINT ["opentelemetry-instrument", "--traces_exporter", "otlp", "--metrics_exporter", "prometheus", "--logs_exporter", "otlp", "--", "/usr/bin/python3", "/opt/odoo/odoo-entrypoint.py"]
 
-ENTRYPOINT ["/usr/bin/python3", "/opt/odoo/odoo-entrypoint.py"]
+# ENTRYPOINT ["/usr/bin/python3", "/opt/odoo/odoo-entrypoint.py"]

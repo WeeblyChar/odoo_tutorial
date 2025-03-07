@@ -8,7 +8,7 @@ exporters:
   debug:
     verbosity: detailed  # Print logs for debugging
   otlp:
-    endpoint: "tempo:4317"  # gRPC for Tempo (adjust if using HTTP)
+    endpoint: "tempo:4318"  # gRPC for Tempo (adjust if using HTTP)
     tls:
       insecure: true
   loki:  # Use the direct Loki exporter instead of OTLP
