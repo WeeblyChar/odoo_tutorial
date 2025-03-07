@@ -5,13 +5,10 @@ services:
     depends_on:
       - db
       - otel-collector
-    environment:
-      - HOST=db
-      - USER=odoo
-      - PASSWORD=odoo
     ports:
       - "8069:8069"
     volumes:
+      - ./odoo.conf:/etc/odoo/odoo.conf
       - ./addons:/mnt/extra-addons
       - ./config:/etc/odoo
     networks:

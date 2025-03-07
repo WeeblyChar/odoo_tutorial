@@ -5,16 +5,25 @@ receivers:
       http:
 
 exporters:
-  loki:
-    endpoint: http://loki:3100/loki/api/v1/push
-  otlphttp:
-    endpoint: "http://tempo:4318"
+  debug:
+    verbosity: detailed  # Print logs for debugging
+  otlp:
+    endpoint: "tempo:4317"  # gRPC for Tempo (adjust if using HTTP)
+    tls:
+      insecure: true
+  loki:  # Use the direct Loki exporter instead of OTLP
+    endpoint: "http://loki:3100/loki/api/v1/push"
+  prometheus:  # Add Prometheus for metrics
+    endpoint: "0.0.0.0:9464"
 
 service:
   pipelines:
     logs:
       receivers: [otlp]
-      exporters: [loki]
+      exporters: [loki, debug]  # Send logs to Loki
     traces:
       receivers: [otlp]
-      exporters: [otlphttp]
+      exporters: [otlp, debug]  # Send traces to Tempo
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheus]  # Expose metrics for Prometheus
