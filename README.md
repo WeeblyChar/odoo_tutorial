@@ -1,32 +1,55 @@
-[![Build Status](https://runbot.odoo.com/runbot/badge/flat/1/master.svg)](https://runbot.odoo.com/runbot)
-[![Tech Doc](https://img.shields.io/badge/master-docs-875A7B.svg?style=flat&colorA=8F8F8F)](https://www.odoo.com/documentation/master)
-[![Help](https://img.shields.io/badge/master-help-875A7B.svg?style=flat&colorA=8F8F8F)](https://www.odoo.com/forum/help-1)
-[![Nightly Builds](https://img.shields.io/badge/master-nightly-875A7B.svg?style=flat&colorA=8F8F8F)](https://nightly.odoo.com/)
+# Odoo with OpenTelemetry  
 
-Odoo
-----
+This is a modified version of Odoo with OpenTelemetry LGTM, integrated via the OpenTelemetry module within the application itself.  
 
-Odoo is a suite of web based open source business apps.
+## Access URLs  
 
-The main Odoo Apps include an <a href="https://www.odoo.com/page/crm">Open Source CRM</a>,
-<a href="https://www.odoo.com/app/website">Website Builder</a>,
-<a href="https://www.odoo.com/app/ecommerce">eCommerce</a>,
-<a href="https://www.odoo.com/app/inventory">Warehouse Management</a>,
-<a href="https://www.odoo.com/app/project">Project Management</a>,
-<a href="https://www.odoo.com/app/accounting">Billing &amp; Accounting</a>,
-<a href="https://www.odoo.com/app/point-of-sale-shop">Point of Sale</a>,
-<a href="https://www.odoo.com/app/employees">Human Resources</a>,
-<a href="https://www.odoo.com/app/social-marketing">Marketing</a>,
-<a href="https://www.odoo.com/app/manufacturing">Manufacturing</a>,
-<a href="https://www.odoo.com/">...</a>
+- **Odoo:** [http://localhost:8069](http://localhost:8069)  
+- **Grafana:** [http://localhost:3000](http://localhost:3000)  
+- **Prometheus:** [http://localhost:9090](http://localhost:9090)  
 
-Odoo Apps can be used as stand-alone applications, but they also integrate seamlessly so you get
-a full-featured <a href="https://www.odoo.com">Open Source ERP</a> when you install several Apps.
+## To-Do List  
 
-Getting started with Odoo
--------------------------
+### ✅ OpenTelemetry Integration with Backends  
+- **Loki** ✅  
+  - Connect Odoo via OpenTelemetry receiver. ✅  
+  - Connect Grafana via OpenTelemetry exporter. ✅  
+  - Build a pipeline for data transmission. ✅  
+  - Verify data reception in Grafana. ✅  
 
-For a standard installation please follow the <a href="https://www.odoo.com/documentation/master/administration/install/install.html">Setup instructions</a>
-from the documentation.
+- **Tempo** ✅  
+  - Connect Odoo via OpenTelemetry receiver. ✅  
+  - Connect Grafana via OpenTelemetry exporter. ✅  
+  - Build a pipeline for data transmission. ✅  
+  - Verify data reception in Grafana. ✅  
 
-To learn the software, we recommend the <a href="https://www.odoo.com/slides">Odoo eLearning</a>, or <a href="https://www.odoo.com/page/scale-up-business-game">Scale-up</a>, the <a href="https://www.odoo.com/page/scale-up-business-game">business game</a>. Developers can start with <a href="https://www.odoo.com/documentation/master/developer/howtos.html">the developer tutorials</a>
+- **Prometheus** ✅  
+  - Connect Odoo via OpenTelemetry receiver. ✅  
+  - Connect Grafana via OpenTelemetry exporter. ✅  
+  - Build a pipeline for data transmission. ✅  
+  - Verify data reception in Grafana. ✅  
+
+### 🔧 Data Validation (In Progress)  
+- **Loki** (BETA)  
+  - Validate logs. ✅  
+  - Extract data from the `Line` variable using regex. ✅  
+  - Further improvements (TBA).  
+
+- **Tempo** (DEV)  
+  - Validate traces. ❓  
+  - Further improvements (TBA).  
+
+- **Prometheus** (DEV)  
+  - Validate metrics. ❌ (Issues found)  
+  - Integrate Prometheus Exporter module: [Prometheus Exporter by Mint System](https://github.com/Mint-System/Odoo-Apps-Server-Tools/tree/17.0/prometheus_exporter) ✅  
+  - Validate metrics after exporter module integration. ✅  
+  - **Custom metrics:** (DEV)  
+    - ORM Metrics (In Development)  
+    - System Metrics ✅  
+
+### 🛠 Fixes & Improvements  
+- Resolve Prometheus connection issues between OpenTelemetry and Odoo during module installation.  
+- Create a Grafana dashboard. (In Development)  
+- Add detailed code documentation and explanations.  
+
+*→ README design generated using ChatGPT*
