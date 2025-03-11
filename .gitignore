@@ -51,8 +51,6 @@ package.json
 /.github
 odoo-bin
 requirements.txt
-setup.cfg
-setup.py
 CONTRIBUTING.md
 
 # various virtualenv
