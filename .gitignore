@@ -40,20 +40,21 @@ package-lock.json
 package.json
 .husky
 
-#
-/.tx/
-/.vscode/
-/addons/
-/debian/
-/doc/
-/odoo/
-/setup/
-CONTRIBUTING.md
+# ignore Odoo
+/odoo
+/setup
+/doc
+/debian
+/addons
+/.vscode
+/.tx
+/.github
 odoo-bin
+requirements.txt
 setup.cfg
 setup.py
-
-
+CONTRIBUTING.md
+MANIFEST.in
 # various virtualenv
 /bin/
 /build/
