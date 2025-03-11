@@ -40,6 +40,20 @@ package-lock.json
 package.json
 .husky
 
+#
+/.tx/
+/.vscode/
+/addons/
+/debian/
+/doc/
+/odoo/
+/setup/
+CONTRIBUTING.md
+odoo-bin
+setup.cfg
+setup.py
+
+
 # various virtualenv
 /bin/
 /build/

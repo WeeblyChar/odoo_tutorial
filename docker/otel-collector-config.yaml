@@ -5,14 +5,6 @@ receivers:
         endpoint: "0.0.0.0:4317" # <--- gRPC port
       http:
         endpoint: "0.0.0.0:4318" # <--- HTTP port
-  filelog:
-    exclude: []
-    include:
-      - /var/log/docker/containers/odoo/*.log  # For file logging. But this makes Loki to read Logs
-    include_file_name: false
-    include_file_path: true
-    operators:
-      - type: json_parser
   prometheus:
     config:
       scrape_configs:
@@ -36,7 +28,7 @@ exporters:
   prometheus:
     endpoint: "0.0.0.0:9464" # <-- Prometheus endpoint, where will the metrics be exported to.
   debug:
-    verbosity: detailed # <-- Prints the logs into OTel Collector logs. Just for checking if it's recieving logs.
+    verbosity: normal # <-- Prints the logs into OTel Collector logs. Just for checking if it's recieving logs.
   otlp:
     endpoint: "tempo:4317"  # <-- Trace endpoint for Tempo
     tls:
@@ -55,7 +47,7 @@ service:
     traces: # <-- Send to Tempo
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp]
+      exporters: [otlp, debug]
     metrics: # <-- Send to Prometheus
       receivers: [otlp, prometheus]
       processors: [batch]

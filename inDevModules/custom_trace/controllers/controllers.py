@@ -9,6 +9,7 @@ from opentelemetry.sdk.trace.export import (
 )
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 import time
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
 #############################################
 #===========================================#
 ######## Logging Dependencies (Loki) ########
@@ -138,14 +139,17 @@ request_counter = meter.create_counter(
 ################ Trace/Span #################
 # Set up OpenTelemetry Tracer Provider
 trace.set_tracer_provider(TracerProvider(resource=Resource.create({"service.name": "odoo"})))
-tracer = trace.get_tracer(__name__)
+tracer = trace.get_tracer_provider()
 
 # Configure OTLP Exporter to send traces to Tempo
 otlp_exporter = OTLPSpanExporter(endpoint="http://otel-collector:4317", insecure=True)
 
 # Attach Exporter to OpenTelemetry SDK
 span_processor = BatchSpanProcessor(otlp_exporter)
-trace.get_tracer_provider().add_span_processor(span_processor)
+tracer.add_span_processor(span_processor)
+
+# Apply instrumentation for HTTP requests
+RequestsInstrumentor().instrument()
 
 # Print traces to console for debugging (this can be optional)
 # trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
