@@ -17,7 +17,7 @@
     'installable': True,
     'application': False, # <-- No, this is not an application. It's just an extension.
     'auto_install': True, # <-- Automatically install this package to start monitoring Odoo during server start (optional)
-    'category': 'inDevModules/Custom_Tracing',
+    'category': 'inDevModules/OpenTelemetry_Collector',
     "data": [
         "security/ir.model.access.csv",
         "data/ir_metric.xml",
