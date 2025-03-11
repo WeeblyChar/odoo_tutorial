@@ -1,0 +1,24 @@
+<odoo>
+    <record id="system_param_exposed_ports" model="ir.system.parameter">
+        <field name="name">Exposed Ports</field>
+    </record>
+
+    <record id="system_param_exposed_ports_value_1" model="ir.system.parameter.value">
+        <field name="parameter_id" ref="system_param_exposed_ports"/>
+        <field name="value">8412</field>
+    </record>
+
+    <record id="system_param_exposed_ports_value_2" model="ir.system.parameter.value">
+        <field name="parameter_id" ref="system_param_exposed_ports"/>
+        <field name="value">9000</field>
+    </record>
+
+    <record id="system_param_log_level" model="ir.system.parameter">
+        <field name="name">Log Level</field>
+    </record>
+
+    <record id="system_param_log_level_value" model="ir.system.parameter.value">
+        <field name="parameter_id" ref="system_param_log_level"/>
+        <field name="value">INFO</field>
+    </record>
+</odoo>

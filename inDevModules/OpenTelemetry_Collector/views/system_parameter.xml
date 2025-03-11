@@ -1,0 +1,47 @@
+<odoo>
+    <record id="view_system_parameter_list" model="ir.ui.view">
+        <field name="name">system.parameter.list</field>
+        <field name="model">ir.system.parameter</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="value_display" widget="html"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_system_parameter_form" model="ir.ui.view">
+        <field name="name">system.parameter.form</field>
+        <field name="model">ir.system.parameter</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="value_ids">
+                            <list editable="bottom">
+                                <field name="value"/>
+                            </list>
+                        </field>
+                        <group>
+                            <field name="value_display" widget="html"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="system_parameter_action" model="ir.actions.act_window">
+        <field name="name">System Parameters</field>
+        <field name="res_model">ir.system.parameter</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="menu_system_parameters"
+        name="System Parameters"
+        parent="base.menu_administration"
+        action="system_parameter_action"
+    />
+</odoo>

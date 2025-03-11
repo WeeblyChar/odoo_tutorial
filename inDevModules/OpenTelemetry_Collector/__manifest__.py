@@ -11,7 +11,7 @@
                     Jokes aside, there will be an extension for metrics in this module.
                     You can access this by going into Developer Mode and go to Settings -> Technical -> Metrics. It should be listed under Resources.
                    """,
-    'author': 'Amsal',
+    'author': 'Amsal Anugrah',
     'depends': ['base', 'resource', 'bus'],
     'data': [],
     'installable': True,
@@ -19,9 +19,11 @@
     'auto_install': True, # <-- Automatically install this package to start monitoring Odoo during server start (optional)
     'category': 'inDevModules/OpenTelemetry_Collector',
     "data": [
+        "views/ir_metric.xml",
+        'views/system_parameter.xml',
         "security/ir.model.access.csv",
         "data/ir_metric.xml",
-        "views/ir_metric.xml",
+        'data/system_parameter.xml',
     ],
     'external_dependencies':{
       'python': [ # <-- Refer to Dockerfile if module breaks
