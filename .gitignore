@@ -54,7 +54,7 @@ requirements.txt
 setup.cfg
 setup.py
 CONTRIBUTING.md
-MANIFST.in
+MANIFEST.in
 
 # various virtualenv
 /bin/
