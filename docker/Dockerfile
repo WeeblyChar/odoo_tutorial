@@ -1,18 +1,19 @@
-# Use the official Odoo image as the base
+# Use the official Odoo image as the base (can change depending on the Odoo version).
 FROM odoo:latest
 
+# Set as root to install dependencies.
 USER root
 
 # Install OpenTelemetry dependencies in a clean environment
 RUN pip config set global.break-system-packages true && \
+#                  ^ DEVELOPER ONLY (ONLY IF NEEDED). REMOVE IF NOT NEEDED
     pip install --no-cache-dir \
+    prometheus_client \
+#   ^ Custom prometheus exporter for Odoo
     opentelemetry-exporter-prometheus \
 #   ^ Prometheus Exporter
-    # opentelemetry-api \
-    # opentelemetry-sdk \
-#   ^ Already included in opentelemetry-distro
-#   ^ sdk something, should be made by bootsrtap
     opentelemetry-instrumentation-psycopg2 \
+#   ^ Query Logging
     opentelemetry-instrumentation-wsgi \
     opentelemetry-exporter-otlp-proto-http\ 
 #   ^ HTTP
@@ -21,36 +22,16 @@ RUN pip config set global.break-system-packages true && \
     opentelemetry-distro && \
 #   ^ Contains opentelemetry api and sdk
     opentelemetry-bootstrap -a install && \
+#   ^ unpack the distro package
     rm ~/.config/pip/pip.conf
 
+# Installing curl, wget, ping and grep for docker container. REMOVE IF NOT NEEDED.
 RUN apt-get update && apt-get install -y curl wget iputils-ping grep && rm -rf /var/lib/apt/lists/*
 
-#Entrypoint something
+
+# Entrypoint
 COPY entrypoint.py /opt/odoo/odoo-entrypoint.py
 RUN chmod +x /opt/odoo/odoo-entrypoint.py
 
-# Set environment variables for OpenTelemetry
-# ENV OTEL_SERVICE_NAME=odoo
-# ENV OTEL_TRACES_EXPORTER=console,otlp
-# ENV OTEL_METRICS_EXPORTER=console,otlp
-# ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
-# ENV OTEL_EXPORTER_PROMETHEUS_HOST="otel-collector"
-# ENV OTEL_EXPORTER_PROMETHEUS_PORT=4317
-
-# Ensure OpenTelemetry CLI tool is accessible
-# ENV PATH="/usr/local/bin:/root/.local/bin:$PATH"
-
-# Check instrumentation package
-# RUN ln -s /usr/local/bin/opentelemetry-instrument /usr/bin/opentelemetry-instrument || true
-
-# Copy the modified Odoo startup script
-# COPY odoo-bin /usr/bin/odoo-bin
-
-# Ensure execution permission
-# RUN chmod +x /usr/bin/odoo-bin
-
-# Set the entrypoint
-# ENTRYPOINT ["odoo-bin"]
-
+# Switch back to user
 USER odoo
-

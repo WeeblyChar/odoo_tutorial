@@ -7,13 +7,10 @@ services:
       - otel-collector
     ports:
       - "8069:8069"
-      # - "9464:9464" # <-- Expose port to OpenTelemetry Prometheus exporter
     volumes:
       - ./odoo.conf:/etc/odoo/odoo.conf
       - ../addons:/mnt/extra-addons
-      - ../tutorials:/mnt/tutorial-addons
       - ../inDevModules:/mnt/inDevModules
-    # command: ["opentelemetry-instrument", "odoo", "-i", "base"]
     command: ["python3", "/opt/odoo/odoo-entrypoint.py"]
     networks:
       - odoo-network
@@ -47,7 +44,6 @@ services:
     environment:
       - OTEL_SERVICE_NAME=odoo
       - OTEL_RESOURCE_ATTRIBUTES=service.name=odoo,service.version=1.0.0
-      # - OTEL_LOG_LEVEL=debug
       - PYTHONPATH=/opt/odoo:/usr/local/lib/python3.12/dist-packages
     networks:
       - odoo-network
@@ -96,19 +92,6 @@ services:
     command: -config.file=/etc/loki-config.yml
     ports:
       - "3100:3100"  # Loki API
-    networks:
-      - odoo-network
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "5050:80"
-    depends_on:
-      - db
     networks:
       - odoo-network
 

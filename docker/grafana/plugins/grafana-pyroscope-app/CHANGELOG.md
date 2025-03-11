@@ -1,3 +1,46 @@
+# [1.2.0](https://github.com/grafana/explore-profiles/compare/v1.1.0...v1.2.0) (2025-03-10)
+
+
+### Features
+
+* Add generated typed Pyroscope API client ([#410](https://github.com/grafana/explore-profiles/issues/410)) ([2e2b4e1](https://github.com/grafana/explore-profiles/commit/2e2b4e1d41fab1ed37029fff0073879f51fe932f))
+* **FlameGraph:** Show the flame graph for a selected span ([#445](https://github.com/grafana/explore-profiles/issues/445)) ([2e036ee](https://github.com/grafana/explore-profiles/commit/2e036eeabc705e147560f13d8137821adf2585c5))
+
+
+
+# [1.1.0](https://github.com/grafana/explore-profiles/compare/v1.0.0...v1.1.0) (2025-02-21)
+
+
+### Bug Fixes
+
+* **Routes:** Add redirection for non-supported paths ([#427](https://github.com/grafana/explore-profiles/issues/427)) ([edd56d3](https://github.com/grafana/explore-profiles/commit/edd56d34cb40dfc8bfbaba6788c6c04f46d571b2))
+
+
+### Features
+
+* **investigations:** adapt to changed plugin id ([#429](https://github.com/grafana/explore-profiles/issues/429)) ([7b41af9](https://github.com/grafana/explore-profiles/commit/7b41af95c9a938d05c008017b5546a5aab319531))
+* Rename Explore Profiles to Grafana Profiles Drilldown ([#430](https://github.com/grafana/explore-profiles/issues/430)) ([e91ff90](https://github.com/grafana/explore-profiles/commit/e91ff90cf697070be37b2140d3318ea4135db7f4)), closes [#432](https://github.com/grafana/explore-profiles/issues/432)
+
+
+
+# [1.0.0](https://github.com/grafana/explore-profiles/compare/v0.1.23...v1.0.0) (2025-02-14)
+
+
+### Features
+
+* **App:** Changes for GA ([#398](https://github.com/grafana/explore-profiles/issues/398)) ([71ed3f8](https://github.com/grafana/explore-profiles/commit/71ed3f8d312317474ffec674d056968f3fefad64))
+
+
+
+## [0.1.23](https://github.com/grafana/explore-profiles/compare/v0.1.22...v0.1.23) (2025-02-14)
+
+
+### Bug Fixes
+
+* Remove lazy loading of page components ([#422](https://github.com/grafana/explore-profiles/issues/422)) ([45bc71e](https://github.com/grafana/explore-profiles/commit/45bc71e27ac8306d735c980b3436b61889f522d9))
+
+
+
 ## [0.1.22](https://github.com/grafana/explore-profiles/compare/v0.1.21...v0.1.22) (2025-02-13)
 
 
