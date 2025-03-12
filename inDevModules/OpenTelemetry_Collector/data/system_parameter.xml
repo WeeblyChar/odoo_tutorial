@@ -5,12 +5,12 @@
 
     <record id="system_param_exposed_ports_value_1" model="ir.system.parameter.value">
         <field name="parameter_id" ref="system_param_exposed_ports"/>
-        <field name="value">8412</field>
+        <field name="value">8069</field>
     </record>
 
     <record id="system_param_exposed_ports_value_2" model="ir.system.parameter.value">
         <field name="parameter_id" ref="system_param_exposed_ports"/>
-        <field name="value">9000</field>
+        <field name="value">9464</field>
     </record>
 
     <record id="system_param_log_level" model="ir.system.parameter">
