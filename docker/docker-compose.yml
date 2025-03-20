@@ -14,8 +14,6 @@ services:
     command: ["python3", "/opt/odoo/odoo-entrypoint.py"]
     networks:
       - odoo-network
-    mem_limit: 4g  # Increase memory limit
-    mem_reservation: 2g  # Set a minimum memory allocation
 
   db:
     image: postgres:15
@@ -36,9 +34,9 @@ services:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     command: ["--config=/etc/otel-collector-config.yaml"]
     ports:
-      - "4317:4317"  # gRPC
-      - "4318:4318"  # HTTP
-      - "9464:9464"  # prometheus exporter
+      - "4317:4317"
+      - "4318:4318"
+      - "9464:9464"
     depends_on:
       - loki
     environment:
@@ -55,7 +53,7 @@ services:
     volumes:
       - ./tempo-config.yaml:/etc/tempo.yaml
     ports:
-      - "3200:3200"  # Query API
+      - "3200:3200"
     networks:
       - odoo-network
 
