@@ -33,37 +33,6 @@ services:
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     command: ["--config=/etc/otel-collector-config.yaml"]
-    ports:
-      - "4317:4317"
-      - "4318:4318"
-      - "9464:9464"
-    depends_on:
-      - loki
-    environment:
-      - OTEL_SERVICE_NAME=odoo
-      - OTEL_RESOURCE_ATTRIBUTES=service.name=odoo,service.version=1.0.0
-      - PYTHONPATH=/opt/odoo:/usr/local/lib/python3.12/dist-packages
-    networks:
-      - odoo-network
-
-  tempo:
-    image: grafana/tempo:latest
-    container_name: tempo
-    command: ["-config.file=/etc/tempo.yaml"]
-    volumes:
-      - ./tempo-config.yaml:/etc/tempo.yaml
-    ports:
-      - "3200:3200"
-    networks:
-      - odoo-network
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
     networks:
       - odoo-network
 
@@ -81,22 +50,9 @@ services:
     networks:
       - odoo-network
 
-  loki:
-    image: grafana/loki:latest
-    container_name: loki
-    volumes:
-      - ./loki-config.yml:/etc/loki-config.yml
-      - loki-data:/var/lib/loki  # Persistent storage
-    command: -config.file=/etc/loki-config.yml
-    ports:
-      - "3100:3100"  # Loki API
-    networks:
-      - odoo-network
-
 networks:
   odoo-network:
     driver: bridge
 
 volumes:
   odoo-db-data:
-  loki-data:  # Persistent storage for Loki
