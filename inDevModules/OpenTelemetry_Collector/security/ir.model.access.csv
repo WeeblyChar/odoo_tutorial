@@ -1,4 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_ir_metric,access_ir_metric,OpenTelemetry_Collector.model_ir_metric,base.group_user,1,1,1,1
 access_system_parameter_admin,access_system_parameter_admin,OpenTelemetry_Collector.model_ir_system_parameter,base.group_system,1,1,1,1
-access_ir_system_parameter_value,System Parameter Value access,model_ir_system_parameter_value,base.group_user,1,1,1,1

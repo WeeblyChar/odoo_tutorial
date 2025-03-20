@@ -95,9 +95,12 @@ class PrometheusController(http.Controller):
         disk_total_gauge.set(system_metrics["disk_total_gb"])
         
         # Collect Odoo-specific metrics
-        active_users_gauge = Gauge("odoo_active_users", "Number of active users", registry=registry)
-        active_users_gauge.set(request.env["ir.metric"].get_active_users())
-
+        online_users_gauge = Gauge("odoo_online_users", "Number of online users", registry=registry)
+        online_users_gauge.set(request.env["ir.metric"].get_online_users())
+        
+        total_users_gauge = Gauge("odoo_total_users", "Number of total users", registry=registry)
+        total_users_gauge.set(request.env["ir.metric"].get_total_users())
+        
         response_time_gauge = Gauge("odoo_request_response_time", "Average request response time", registry=registry)
         response_time_gauge.set(request.env["ir.metric"].get_request_response_time())
 

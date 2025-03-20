@@ -22,7 +22,7 @@
         <field name="operation">count</field>
     </record>
 
-    <record id="user_online" model="ir.metric" forcecreate="True">
+    <!-- <record id="user_online" model="ir.metric" forcecreate="True">
         <field name="name">user_online</field>
         <field name="description">Count active users (Currently Logged In).</field>
         <field name="metric_type">gauge</field>
@@ -40,7 +40,7 @@
         <field name="domain">[]</field>
         <field name="field_id" eval="ref('bus.field_bus_presence__user_id')" />
         <field name="operation">count</field>
-    </record>
+    </record> -->
 
     <!-- <record id="pending_mails" model="ir.metric" forcecreate="True">
         <field name="name">odoo_pending_mails</field>

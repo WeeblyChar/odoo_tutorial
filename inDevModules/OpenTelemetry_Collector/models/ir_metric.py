@@ -160,9 +160,14 @@ class Metric(models.Model):
         }
 
     @staticmethod
-    def get_active_users():
+    def get_online_users():
         """ Count active users (logged in) """
-        return request.env['res.users'].sudo().search_count([('login', '!=', False)])
+        return request.env['bus.field_bus_presence__user_id'].sudo().search_count([('status', '=', 'online')])
+    
+    @staticmethod
+    def get_online_users():
+        """ Count active users (logged in) """
+        return request.env['bus.field_bus_presence__user_id'].sudo().search_count([])
 
     @staticmethod
     def get_request_response_time():
