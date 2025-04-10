@@ -6,8 +6,6 @@ os.environ["PYTHONPATH"] = "/usr/local/lib/python3.12/dist-packages"
 
 import odoo
 import sys
-from opentelemetry.instrumentation.auto_instrumentation.sitecustomize import initialize
-initialize()
 
 # Start Odoo
 if __name__ == "__main__":

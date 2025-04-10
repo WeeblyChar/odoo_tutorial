@@ -22,10 +22,10 @@ exporters:
     endpoint: "0.0.0.0:9464"
   debug:
     verbosity: normal
-  otlp:
-    endpoint: "tempo:4317"
-    tls:
-      insecure: true
+  # otlp:
+  #   endpoint: "tempo:4317"
+  #   tls:
+  #     insecure: true
   otlphttp: 
     endpoint: "http://loki:3100/otlp"
     tls:
@@ -37,10 +37,10 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [debug]
-    traces:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [otlp]
+    # traces:
+    #   receivers: [otlp]
+    #   processors: [batch]
+    #   exporters: [otlp]
     metrics:
       receivers: [prometheus]
       processors: [batch]
