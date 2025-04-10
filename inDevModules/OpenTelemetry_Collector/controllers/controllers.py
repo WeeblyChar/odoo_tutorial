@@ -3,10 +3,7 @@ from odoo import http
 from opentelemetry import trace
 from opentelemetry.trace import SpanKind
 from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import (
-    BatchSpanProcessor,
-    ConsoleSpanExporter
-)
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 import time
 #############################################
@@ -14,9 +11,7 @@ import time
 ######## Logging Dependencies (Loki) ########
 import logging
 from opentelemetry._logs import set_logger_provider
-from opentelemetry.exporter.otlp.proto.grpc._log_exporter import (
-    OTLPLogExporter,
-)
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
 from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
 from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 from opentelemetry.sdk.resources import Resource
@@ -27,6 +22,39 @@ from opentelemetry import metrics
 from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+#############################################
+#===========================================#
+######## Initialize Instrumentation #########
+import logging
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.psycopg2 import Psycopg2Instrumentor
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
+
+# Logging Setup
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+logger.info("✅   Initializing OpenTelemetry...")
+
+# Set OpenTelemetry Tracer Provider
+trace.set_tracer_provider(TracerProvider())
+tracer = trace.get_tracer(__name__)
+
+# Set Up OpenTelemetry Exporter
+otlp_exporter = OTLPSpanExporter(endpoint="http://otel-collector:4317", insecure=True)
+span_processor = BatchSpanProcessor(otlp_exporter)
+trace.get_tracer_provider().add_span_processor(span_processor)
+
+# Apply Instrumentations
+RequestsInstrumentor().instrument()
+Psycopg2Instrumentor().instrument()
+LoggingInstrumentor().instrument(set_logging_format=True) 
+
+logger.info("✅   OpenTelemetry Instrumentation Applied!")
 #############################################
 #===========================================#
 ##### OTel-Logger initialization #####
