@@ -2,29 +2,41 @@ receivers:
   otlp:
     protocols:
       grpc:
+        endpoint: "0.0.0.0:4317"
+      http:
+        endpoint: "0.0.0.0:4318"
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'odoo'
+          scrape_interval: 5s
+          static_configs:
+            - targets: ['0.0.0.0:8069/metrics']
+
+processors:
+  batch:
 
 exporters:
+  debug:
+    verbosity: detailed
+  # otlp:
+  #   endpoint: "http://tempo:4317"
+  #   tls:
+  #     insecure: true
+  loki:
+    endpoint: "http://loki:3100/loki/api/v1/push"
   prometheus:
     endpoint: "0.0.0.0:9464"
-  debug:
-    verbosity: normal
-  otlp:
-    endpoint: "tempo:4317"
-    tls:
-      insecure: true
-  otlphttp: 
-    endpoint: "http://loki:3100/otlp"
-    tls:
-      insecure: true
 
 service:
   pipelines:
+    # traces:
+    #   receivers: [otlp]
+    #   processors: [batch]
+    #   exporters: [otlp]
     logs:
       receivers: [otlp]
-      exporters: [debug]
-    traces:
-      receivers: [otlp]
-      exporters: [otlp]
+      exporters: [loki]
     metrics:
       receivers: [otlp]
       exporters: [prometheus]
