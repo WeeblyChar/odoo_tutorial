@@ -9,9 +9,10 @@ receivers:
     config:
       scrape_configs:
         - job_name: 'odoo'
-          scrape_interval: 5s
+          scrape_interval: 5s # <-- Delay between scrape jobs
           static_configs:
-            - targets: ['0.0.0.0:8069/metrics']
+            - targets: ['odoo:8069']  # <-- Odoo port to listen
+          metrics_path: '/metrics'    # <-- Path for prometheus to scrap from
 
 processors:
   batch:
@@ -38,5 +39,5 @@ service:
       receivers: [otlp]
       exporters: [loki]
     metrics:
-      receivers: [otlp]
+      receivers: [prometheus]
       exporters: [prometheus]

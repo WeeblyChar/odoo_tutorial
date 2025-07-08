@@ -12,7 +12,6 @@ RUN pip config set global.break-system-packages true && \
     opentelemetry-instrumentation-psycopg2 \
     opentelemetry-instrumentation-logging \
     opentelemetry-instrumentation-requests \
-    opentelemetry-instrumentation-sqlite3 \
     opentelemetry-exporter-otlp && \
     opentelemetry-bootstrap -a install && \
     rm ~/.config/pip/pip.conf
